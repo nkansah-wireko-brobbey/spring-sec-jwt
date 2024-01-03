@@ -23,3 +23,7 @@ logging:
     web: info
     api.springsecjwt: debug
 
+token:
+  expirationms: 86400000
+  secret:
+    key: 46a058ae25db9efe2cfeb17688aabab0cbbcd4b45cfcdd76a5a64bf97a55e67d
