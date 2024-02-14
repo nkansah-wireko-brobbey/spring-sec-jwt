@@ -30,7 +30,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authenticationProvider =
+                new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userService.userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder);
 
@@ -38,18 +39,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager
+            (AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain
+            (HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(csrf->csrf.disable())
                 .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize->authorize.requestMatchers(HttpMethod.POST,"api/v1/signup",
+                .authorizeHttpRequests(
+                        authorize->authorize
+                                .requestMatchers(
+                                        HttpMethod.POST,"api/v1/signup",
                         "/api/v1/signin").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/test/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET,"/api/v1/test/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

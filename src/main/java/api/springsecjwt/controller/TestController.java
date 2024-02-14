@@ -1,9 +1,7 @@
 package api.springsecjwt.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -16,14 +14,15 @@ public class TestController {
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String usersEndPoint() {
         return "ONLY users can see this";
     }
 
     @GetMapping("/admins")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminsEndPoint() {
+        System.out.println("adminsEndPoint");
         return "ONLY admins can see this";
     }
 }

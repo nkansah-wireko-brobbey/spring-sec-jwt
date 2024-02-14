@@ -10,6 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +26,11 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    @Autowired
 private final UserService userService;
+
+    @Autowired
 private JwtService jwtService;
 
 
@@ -49,7 +54,8 @@ private JwtService jwtService;
 
         email = jwtService.extractUserName(jwt);
 
-        if(email.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null){
+        if(!email.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null){
+            log.debug("Email: {}", email);
             UserDetails userDetails = userService.userDetailsService().loadUserByUsername(email);
             if (jwtService.isTokenValid(jwt, userDetails)) {
 
@@ -63,7 +69,7 @@ private JwtService jwtService;
             }
         }
 
-
+filterChain.doFilter(request,response);
 
     }
 }
